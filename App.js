@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, Image,Animated } from 'react-native';
-import {useState} from 'react';
+import Carousel from './components/Carousel';
 
 
 export default function App() {
@@ -8,7 +8,7 @@ export default function App() {
 
   return (
     <View style={ {flex:1}  }>
-      <Text>Hi</Text>
+      <Carousel/>
 
     </View>
   );
