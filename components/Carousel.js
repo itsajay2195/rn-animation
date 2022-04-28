@@ -34,27 +34,71 @@ const DATA = [
     "image": "https://cdn-icons-png.flaticon.com/512/3571/3571665.png"
   }
 ]
+
+const Indicator = ({scrollX})=>{
+    return(
+        <View style={{position:'absolute',bottom:100,flexDirection:'row'}}>
+           {DATA.map((_,i)=>{
+               return(
+                   <View key={'indicator'+i} 
+                     style={{margin:10,height:10,width:10,borderRadius:5,backgroundColor:'#333'}}>
+
+                   </View>
+               )
+           })}
+        </View>
+    )
+}
+
+const BackDrop =({scrollX})=>{
+  const backgroundColor = scrollX.interpolate({
+    inputRange:bgs.map((_,i)=> i*width),
+    outputRange: bgs.map((bg)=>bg)
+  })
+  return(
+    <Animated.View style={[StyleSheet.absoluteFillObject,{backgroundColor}]}>
+
+    </Animated.View>
+  )
+}
+
 const Carousel = () => {
+    const scrollX = React.useRef(new Animated.Value(0)).current
   return (
     <View style={styles.container} >
-      <Text>hi</Text>
+      <BackDrop scrollX={scrollX}/>
       <Animated.FlatList
-        data={DATA}
+         pagingEnabled={true}
+        data={DATA} 
         keyExtractor={item=>item.key}
         horizontal
+        contentContainerStyle={{paddingBottom:100}}
+        scrollEventThrottle={32}
+        onScroll={Animated.event(
+            [{nativeEvent:{contentOffset:{x:scrollX}}}],
+            {useNativeDriver:false}
+        )}
         showsHorizontalScrollIndicator={false}
         renderItem={({item,index})=>{
             return(
-                <View style={{width,justifyContent:'center',alignItems:'center'}}>
-                    <Image
-                        source={{uri:item.image}}
-                        style={{width:width/2,height:width/2,resizeMode:'contain'}}
-                    />
+                <View style={{width,alignItems:'center',padding:20}}>
+                    <View style={{flex:0.7,justifyContent:'center'}}>
+                        <Image
+                            source={{uri:item.image}}
+                            style={{width:width/2,height:width/2,resizeMode:'contain'}}
+                        />
+                    </View >
+
+                    <View style={{flex:0.3}}>
+                         <Text style={{fontWeight:'800',fontSize:28,marginBottom:10,color:'white'}}>{item.title}</Text>
+                         <Text style={{fontWeight:'300',color:"white"}}>{item.description}</Text>
+                    </View>
                 </View>
             )
         }}
 
       />
+      <Indicator  />
     </View>
   )
 }
