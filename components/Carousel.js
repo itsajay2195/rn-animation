@@ -50,11 +50,23 @@ const Indicator = ({scrollX})=>{
     )
 }
 
+const BackDrop =({scrollX})=>{
+  const backgroundColor = scrollX.interpolate({
+    inputRange:bgs.map((_,i)=> i*width),
+    outputRange: bgs.map((bg)=>bg)
+  })
+  return(
+    <Animated.View style={[StyleSheet.absoluteFillObject,{backgroundColor}]}>
+
+    </Animated.View>
+  )
+}
+
 const Carousel = () => {
     const scrollX = React.useRef(new Animated.Value(0)).current
   return (
     <View style={styles.container} >
-      <Text>hi</Text>
+      <BackDrop scrollX={scrollX}/>
       <Animated.FlatList
          pagingEnabled={true}
         data={DATA} 
@@ -63,7 +75,7 @@ const Carousel = () => {
         contentContainerStyle={{paddingBottom:100}}
         scrollEventThrottle={32}
         onScroll={Animated.event(
-            [{nativeEvent:{contentoffset:{x:scrollX}}}],
+            [{nativeEvent:{contentOffset:{x:scrollX}}}],
             {useNativeDriver:false}
         )}
         showsHorizontalScrollIndicator={false}
@@ -78,8 +90,8 @@ const Carousel = () => {
                     </View >
 
                     <View style={{flex:0.3}}>
-                         <Text style={{fontWeight:'800',fontSize:24,marginBottom:10}}>{item.title}</Text>
-                         <Text style={{fontWeight:'300',}}>{item.description}</Text>
+                         <Text style={{fontWeight:'800',fontSize:28,marginBottom:10,color:'white'}}>{item.title}</Text>
+                         <Text style={{fontWeight:'300',color:"white"}}>{item.description}</Text>
                     </View>
                 </View>
             )
